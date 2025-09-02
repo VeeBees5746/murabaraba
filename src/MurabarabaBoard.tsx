@@ -1,6 +1,6 @@
 import React from "react";
-import { useGame } from "./GameLogic";
-import Piece from "./Piece";
+import { useGame } from "./GameLogic.ts";
+import Piece from "./Piece.tsx";
 
 const INTERSECTIONS = [
   [40, 40], [200, 40], [360, 40],
