@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { MurabarabaGame } from './gameLogic';
-import Board from './Board';
-import GameStatus from './GameStatus';
-import Instructions from './Instructions';
+import { MurabarabaGame } from './gameLogic.ts';
+import Board from './Board.tsx';
+import GameStatus from './GameStatus.tsx';
+import Instructions from './Instructions.tsx';
 import './index.css';
 
 const App: React.FC = () => {
