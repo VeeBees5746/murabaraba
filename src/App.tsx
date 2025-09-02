@@ -1,26 +1,84 @@
-import React from "react";
-import MurabarabaBoard from "./MurabarabaBoard.tsx";
-import PlayerPanel from "./PlayerPanel.tsx";
-import Instructions from "./Instructions.tsx";
+import React, { useState } from 'react';
+import { MurabarabaGame } from './gameLogic';
+import Board from './Board';
+import GameStatus from './GameStatus';
+import Instructions from './Instructions';
+import './index.css';
 
 const App: React.FC = () => {
-  const [showInstructions, setShowInstructions] = React.useState(false);
+  const [game] = useState(() => new MurabarabaGame());
+  const [gameState, setGameState] = useState({
+    board: game.board,
+    currentPlayer: game.currentPlayer,
+    phase: game.phase,
+    piecesPlaced: game.piecesPlaced,
+    selectedPosition: game.selectedPosition,
+    removingPiece: game.removingPiece,
+    winner: game.winner
+  });
+  const [showInstructions, setShowInstructions] = useState(false);
+
+  const updateGameState = () => {
+    setGameState({
+      board: [...game.board],
+      currentPlayer: game.currentPlayer,
+      phase: game.phase,
+      piecesPlaced: { ...game.piecesPlaced },
+      selectedPosition: game.selectedPosition,
+      removingPiece: game.removingPiece,
+      winner: game.winner
+    });
+  };
+
+  const handlePositionClick = (position: number) => {
+    const success = game.makeMove(position);
+    if (success) {
+      updateGameState();
+    }
+  };
+
+  const handleReset = () => {
+    game.reset();
+    updateGameState();
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-100 to-orange-300 flex flex-col items-center justify-center font-sans">
-      <header className="w-full text-center py-6 shadow-md bg-white">
-        <h1 className="text-3xl font-bold text-orange-600 drop-shadow">Murabaraba</h1>
-        <button
-          className="mt-2 px-4 py-2 bg-orange-500 text-white rounded shadow hover:bg-orange-600 transition"
-          onClick={() => setShowInstructions(true)}
-        >
-          How to Play
-        </button>
-      </header>
-      <main className="flex flex-col items-center gap-8 mt-8">
-        <PlayerPanel />
-        <MurabarabaBoard />
-      </main>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 p-4">
+      <div className="max-w-4xl mx-auto">
+        <header className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-amber-800 mb-4">Murabaraba</h1>
+          <button
+            onClick={() => setShowInstructions(true)}
+            className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+          >
+            How to Play
+          </button>
+        </header>
+
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
+          <div className="flex-shrink-0">
+            <Board
+              board={gameState.board}
+              selectedPosition={gameState.selectedPosition}
+              onPositionClick={handlePositionClick}
+              removingPiece={gameState.removingPiece}
+              currentPlayer={gameState.currentPlayer}
+            />
+          </div>
+          
+          <div className="flex-shrink-0">
+            <GameStatus
+              currentPlayer={gameState.currentPlayer}
+              phase={gameState.phase}
+              piecesPlaced={gameState.piecesPlaced}
+              removingPiece={gameState.removingPiece}
+              winner={gameState.winner}
+              onReset={handleReset}
+            />
+          </div>
+        </div>
+      </div>
+
       {showInstructions && (
         <Instructions onClose={() => setShowInstructions(false)} />
       )}
