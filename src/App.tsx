@@ -1,7 +1,7 @@
 import React from "react";
-import MurabarabaBoard from "./MurabarabaBoard";
-import PlayerPanel from "./PlayerPanel";
-import Instructions from "./Instructions";
+import MurabarabaBoard from "./MurabarabaBoard.tsx";
+import PlayerPanel from "./PlayerPanel.tsx";
+import Instructions from "./Instructions.tsx";
 
 const App: React.FC = () => {
   const [showInstructions, setShowInstructions] = React.useState(false);
